@@ -2,6 +2,7 @@ package com.netflixclone.netflix_backend.controller;
 
 import com.netflixclone.netflix_backend.dto.MovieRequestDto;
 import com.netflixclone.netflix_backend.dto.MovieResponseDto;
+import com.netflixclone.netflix_backend.dto.MovieUpdateRequestDto;
 import com.netflixclone.netflix_backend.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,11 +18,6 @@ public class MovieController {
 
     private final MovieService movieService;
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(ex.getMessage());
-    }
 
     @PostMapping("/admin/movies")
     public ResponseEntity<String> addMovie(@RequestBody MovieRequestDto dto) {
@@ -45,5 +41,17 @@ public class MovieController {
         MovieResponseDto movie = movieService.findMovieById(id);
 
         return ResponseEntity.ok(movie);
+    }
+
+    @PutMapping("/admin/movies/{id}")
+    public ResponseEntity<MovieResponseDto> updateMovie(@PathVariable Long id, @RequestBody MovieUpdateRequestDto dto) {
+        MovieResponseDto updateMovie = movieService.updateMovie(id, dto);
+        return ResponseEntity.ok(updateMovie);
+    }
+
+    @DeleteMapping("/admin/movies/{id}")
+    public ResponseEntity<Void> deleteMovie(@PathVariable Long id){
+        movieService.deleteMovie(id);
+        return ResponseEntity.noContent().build();
     }
 }

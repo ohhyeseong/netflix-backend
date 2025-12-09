@@ -2,10 +2,12 @@ package com.netflixclone.netflix_backend.service;
 
 import com.netflixclone.netflix_backend.dto.MovieRequestDto;
 import com.netflixclone.netflix_backend.dto.MovieResponseDto;
+import com.netflixclone.netflix_backend.dto.MovieUpdateRequestDto;
 import com.netflixclone.netflix_backend.entity.Movie;
 import com.netflixclone.netflix_backend.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import java.util.List;
@@ -44,5 +46,31 @@ public class MovieService {
 
         return responseDto;
 
+    }
+
+    // 영화 정보 수정(업데이트)
+    @Transactional
+    public MovieResponseDto updateMovie(Long id, MovieUpdateRequestDto dto) {
+        Movie movie = movieRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("영화가 등록되어있지 않습니다."));
+
+        if(dto.getTitle() != null){
+            movie.setTitle(dto.getTitle());
+        }
+        if(dto.getDescription() != null){
+            movie.setDescription(dto.getDescription());
+        }
+        if(dto.getGenre() != null){
+            movie.setGenre(dto.getGenre());
+        }
+        return MovieResponseDto.from(movie);
+    }
+
+    // 영화 삭제
+    public void deleteMovie(Long id) {
+        Movie movie = movieRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 영화가 존재하지 않습니다."));
+
+        movieRepository.delete(movie);
     }
 }
