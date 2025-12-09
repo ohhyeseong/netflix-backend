@@ -13,10 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 public class UserController {
-//    @GetMapping("/")
-//    public String root() {
-//        return "redirect:/question/list";
-//    }
 
     private final UserService userService;
 

@@ -1,7 +1,5 @@
 package com.netflixclone.netflix_backend;
 
-import com.netflixclone.netflix_backend.entity.Question;
-import com.netflixclone.netflix_backend.repository.QuestionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
