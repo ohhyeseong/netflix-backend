@@ -1,9 +1,12 @@
 package com.netflixclone.netflix_backend.config;
 
+import com.netflixclone.netflix_backend.excption.CustomAccessDeniedHandler;
+import com.netflixclone.netflix_backend.excption.CustomAuthenticationEntryPoint;
 import com.netflixclone.netflix_backend.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -19,6 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
     
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -34,8 +39,15 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
                 // 세션 관리 방식을 STATELESS로 설정 (JWT 사용을 위함)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // 세션 예외 처리 핸들러 등록(내가 원하는 예외 처리{메세지 같은거} 등록)
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler)
+                )
                 // HTTP 요청에 대한 접근 권한 설정
                 .authorizeHttpRequests(authorize -> authorize
+                        // 영화 리스트 조회 경로는 누구나 접근 가능
+                        .requestMatchers(HttpMethod.GET,"/api/movies").permitAll()
                         // H2 콘솔 경로는 누구나 접근 가능
                         .requestMatchers("/h2-console/**").permitAll()
                         // "/signup","/login" 경로로 오는 요청은 모두에게 허용
