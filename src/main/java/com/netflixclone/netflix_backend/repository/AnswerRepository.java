@@ -1,4 +1,7 @@
 package com.netflixclone.netflix_backend.repository;
 
-public interface AnswerRepository {
+import com.netflixclone.netflix_backend.entity.Answer;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AnswerRepository extends JpaRepository<Answer, Integer> {
 }
