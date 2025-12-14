@@ -25,13 +25,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body("회원가입 성공!");
     }
 
-    // 이메일 중복 되면 예외처리
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(ex.getMessage());
-    }
-
     // 로그인
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequestDto) {

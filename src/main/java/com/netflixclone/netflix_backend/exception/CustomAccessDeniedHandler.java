@@ -1,4 +1,4 @@
-package com.netflixclone.netflix_backend.excption;
+package com.netflixclone.netflix_backend.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
